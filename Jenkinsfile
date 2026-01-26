@@ -5,13 +5,13 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
-        sh 'npm install'
+        sh '/opt/homebrew/bin/npm install'
       }
     }
 
     stage('Build Frontend') {
       steps {
-        sh 'npm run build'
+        sh '/opt/homebrew/bin/npm run build'
       }
     }
 
