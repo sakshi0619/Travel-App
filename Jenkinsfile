@@ -1,51 +1,39 @@
-
-
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
-  }
-
-  stages {
-
-    stage('Check Node & NPM') {
-      steps {
-        sh 'node -v'
-        sh 'npm -v'
-      }
+    environment {
+        PATH = "C:\\Program Files\\nodejs;C:\\SonarScanner;C:\\Windows\\System32"
     }
 
-    stage('Install Dependencies') {
-      steps {
-        sh 'npm install'
-      }
-    }
+    stages {
 
-    stage('Build Frontend') {
-      steps {
-        sh 'npm run build'
-      }
-    }
+        stage('Check Node & NPM') {
+            steps {
+                bat 'node -v'
+                bat 'npm -v'
+            }
+        }
 
-    stage('Docker Build') {
-      steps {
-        sh 'docker build -t travel-frontend .'
-      }
-    }
+        stage('Install Dependencies') {
+            steps {
+                bat 'npm install'
+            }
+        }
 
-    stage('Deploy') {
-      steps {
-        sh 'docker run -d -p 3000:3000 travel-frontend'
-      }
-    }
+        stage('SonarQube Scan') {
+            steps {
+                withSonarQubeEnv('MySonarQube') {
+                    bat 'sonar-scanner.bat -Dsonar.projectKey=TravelApp -Dsonar.sources=.'
+                }
+            }
+        }
 
-    stage('Load Testing') {
-      steps {
-        sh 'hey -n 100 -c 5 http://localhost:3000'
-      }
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
     }
-
-  }
 }
-
