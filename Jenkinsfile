@@ -1,15 +1,11 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS'           // Make sure NodeJS is installed in Jenkins Global Tool Config
-        sonarScanner 'SonarScanner' // Install SonarScanner in Jenkins Tools
-    }
-
     environment {
+        PATH = "C:\\Program Files\\nodejs;C:\\SonarScanner\\bin;${env.PATH}"
         SONAR_HOST_URL = 'http://<your-sonarqube-server>:9000'
         SONAR_PROJECT_KEY = 'TravelApp'
-        SONAR_LOGIN_TOKEN = credentials('sonar-token') // Jenkins credential ID for your token
+        SONAR_LOGIN_TOKEN = credentials('sonar-token') // Jenkins Secret Text ID
     }
 
     stages {
