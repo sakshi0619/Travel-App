@@ -5,7 +5,6 @@ pipeline {
         PATH = "C:\\Program Files\\nodejs;C:\\SonarScanner\\bin;${env.PATH}"
         SONAR_HOST_URL = 'http://<your-sonarqube-server>:9000'
         SONAR_PROJECT_KEY = 'TravelApp'
-        SONAR_LOGIN_TOKEN = credentials('sonarqube-token') // Jenkins Secret Text ID
     }
 
     stages {
@@ -25,13 +24,16 @@ pipeline {
 
         stage('SonarQube Scan') {
             steps {
-                withSonarQubeEnv('MySonarQube') {
-                    bat """\
-                    sonar-scanner.bat ^
-                    -Dsonar.projectKey=%SONAR_PROJECT_KEY% ^
-                    -Dsonar.sources=. ^
-                    -Dsonar.host.url=%SONAR_HOST_URL% ^
-                    -Dsonar.login=%SONAR_LOGIN_TOKEN%"""
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_LOGIN_TOKEN')]) {
+                    withSonarQubeEnv('MySonarQube') {
+                        bat """
+                        sonar-scanner.bat ^
+                        -Dsonar.projectKey=%SONAR_PROJECT_KEY% ^
+                        -Dsonar.sources=. ^
+                        -Dsonar.host.url=%SONAR_HOST_URL% ^
+                        -Dsonar.login=%SONAR_LOGIN_TOKEN%
+                        """
+                    }
                 }
             }
         }
