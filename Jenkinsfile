@@ -5,7 +5,7 @@ pipeline {
         PATH = "C:\\Program Files\\nodejs;C:\\SonarScanner\\bin;${env.PATH}"
         SONAR_HOST_URL = 'http://<your-sonarqube-server>:9000'
         SONAR_PROJECT_KEY = 'TravelApp'
-        SONAR_LOGIN_TOKEN = credentials('sonar-token') // Jenkins Secret Text ID
+        SONAR_LOGIN_TOKEN = credentials('sonarqube-token') // Jenkins Secret Text ID
     }
 
     stages {
