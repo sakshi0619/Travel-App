@@ -24,14 +24,15 @@ pipeline {
 
         stage('SonarQube Scan') {
             steps {
-                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_LOGIN_TOKEN')]) {
+                // Use the same credentials ID you created in Jenkins
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                     withSonarQubeEnv('MySonarQube') {
                         bat """
                         sonar-scanner.bat ^
                         -Dsonar.projectKey=%SONAR_PROJECT_KEY% ^
                         -Dsonar.sources=. ^
                         -Dsonar.host.url=%SONAR_HOST_URL% ^
-                        -Dsonar.login=%SONAR_LOGIN_TOKEN%
+                        -Dsonar.login=%SONAR_TOKEN%
                         """
                     }
                 }
