@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // PATH me NodeJS, SonarScanner aur Trivy add kiya
-        PATH = "C:\\Program Files\\nodejs;C:\\SonarScanner\\bin;C:\\Program Files\\Trivy;${env.PATH}"
+        PATH = "C:\\sonarqube\\sonar-scanner-8.0.1.6346-windows-x64\\bin;C:\\Program Files\\nodejs;C:\\Program Files\\Trivy;${env.PATH}"
         SONAR_HOST_URL = 'http://localhost:9000'
         SONAR_PROJECT_KEY = 'TravelApp'
     }
@@ -35,14 +35,13 @@ pipeline {
         // ✅ Stage 4: SonarQube Scan
         stage('SonarQube Scan') {
             steps {
-                // Use the same credentials ID you created in Jenkins
                 withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                     withSonarQubeEnv('MySonarQube') {
                         bat """
-                        sonar-scanner.bat ^
-                        -Dsonar.projectKey=%SONAR_PROJECT_KEY% ^
-                        -Dsonar.sources=. ^
-                        -Dsonar.host.url=%SONAR_HOST_URL% ^
+                        sonar-scanner.bat ^ 
+                        -Dsonar.projectKey=%SONAR_PROJECT_KEY% ^ 
+                        -Dsonar.sources=. ^ 
+                        -Dsonar.host.url=%SONAR_HOST_URL% ^ 
                         -Dsonar.login=%SONAR_TOKEN%
                         """
                     }
@@ -62,7 +61,6 @@ pipeline {
         // ✅ Stage 6: Trivy Scan (Docker image)
         stage('Trivy Scan') {
             steps {
-                // Image name ko environment variable ya directly replace kar sakti ho
                 bat '''
                 trivy image --severity HIGH,CRITICAL --exit-code 1 bits1234/travel-app:latest
                 '''
