@@ -60,10 +60,10 @@ pipeline {
 
         // ✅ Stage 6: Trivy Scan (Docker image)
         stage('Trivy Scan') {
-            steps {
-                bat '''
-                trivy image --severity HIGH,CRITICAL --exit-code 1 bits1234/travel-app:latest
-                '''
+        steps {
+        bat '''
+        C:\\trivy\\trivy.exe image --severity HIGH,CRITICAL --exit-code 1 bits1234/travel-app:latest
+        '''
             }
         }
     }
