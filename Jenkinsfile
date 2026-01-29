@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Add NodeJS, SonarScanner, and Trivy to PATH
-        PATH = "C:\\sonarqube\\sonar-scanner-8.0.1.6346-windows-x64\\bin;C:\\Program Files\\nodejs;C:\\Program Files\\Trivy;${env.PATH}"
+        // Add Docker, NodeJS, SonarScanner, and Trivy to PATH
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\sonarqube\\sonar-scanner-8.0.1.6346-windows-x64\\bin;C:\\Program Files\\nodejs;C:\\Program Files\\Trivy;${env.PATH}"
         SONAR_HOST_URL = 'http://localhost:9000'
         SONAR_PROJECT_KEY = 'TravelApp'
     }
